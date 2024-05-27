@@ -1,10 +1,12 @@
 package it.epicode.u5w7d1teoria.service;
 
 import it.epicode.u5w7d1teoria.dto.UserDto;
+import it.epicode.u5w7d1teoria.entity.Role;
 import it.epicode.u5w7d1teoria.entity.User;
 import it.epicode.u5w7d1teoria.exception.UserNotFoundException;
 import it.epicode.u5w7d1teoria.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,13 +16,17 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public String saveUser(UserDto userDto){
         User user = new User();
         user.setName(userDto.getName());
         user.setSurname(userDto.getSurname());
         user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setRole(Role.USER);
+
 
         userRepository.save(user);
 
@@ -43,7 +49,7 @@ public class UserService {
             user.setName(userDto.getName());
             user.setSurname(userDto.getSurname());
             user.setEmail(userDto.getEmail());
-            user.setPassword(userDto.getPassword());
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
             return userRepository.save(user);
 

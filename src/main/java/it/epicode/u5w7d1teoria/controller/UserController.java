@@ -6,6 +6,7 @@ import it.epicode.u5w7d1teoria.exception.BadRequestException;
 import it.epicode.u5w7d1teoria.exception.UserNotFoundException;
 import it.epicode.u5w7d1teoria.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +21,12 @@ public class UserController {
 
 
     @GetMapping("/api/users")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAllUsers(){
         return userService.getAllUsers();
     }
     @GetMapping("/api/users/{id}")
+    @PreAuthorize("hasAuthority('USER')")
     public User getUserById(@PathVariable int id){
         Optional<User> userOptional = userService.getUserById(id);
 
